@@ -5,7 +5,7 @@ const directorSchema = new Schema(
   {
     name: { type: String },
     age: { type: Number },
-    _movies: { type: Schema.Types.ObjectId, ref: "Movie" }
+    _movies: [{ type: Schema.Types.ObjectId, ref: "Movie" }]
   },
   {
     timestamps: true

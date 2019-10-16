@@ -2,24 +2,59 @@ require("../config/database");
 const Movie = require("../model/Movie");
 const Director = require("../model/Director");
 const mongoose = require("mongoose");
+const axios = require("axios");
 
-const movies = [
-  { name: "blade", genre: "action", rating: 8 },
-  { name: "once upon a time in hollywood", genre: "drama", rating: 9 },
-  { name: "el camino", genre: "drama", rating: 7 }
-];
-const directors = [
-  { name: "russo", _movies: "1", age: 44, id: "4" },
-  { name: "tarrantino", _movies: "2", age: 59, id: "5" },
-  { name: "unknown", _movies: "3", age: 73, id: "6" }
-];
+let movies = [];
+let directors;
+axios
+  .get(
+    "https://api.themoviedb.org/3/movie/popular?page=1&api_key=1646d752a6cb1bd74df305533b85c70f"
+  )
+  .then(res => {
+    console.log(res.data.results);
+    const allMovies = res.data.results.slice(0, 6);
+    allMovies.forEach(movie => {
+      movies.push(
+        new Movie({
+          name: movie.title,
+          overview: movie.overview,
+          rating: movie.vote_average
+        })
+      );
+    });
+    directors = [
+      new Director({
+        name: "director 1",
+        age: 44,
+        _movies: [movies[0]._id, movies[1]._id]
+      }),
+      new Director({
+        name: "director 2",
+        age: 59,
+        _movies: [movies[2]._id, movies[3]._id]
+      }),
+      new Director({
+        name: "director 3",
+        age: 79,
+        _movies: [movies[4]._id, movies[5]._id]
+      })
+    ];
+    movies[0]._director = directors[0]._id;
+    movies[1]._director = directors[0]._id;
+    movies[2]._director = directors[1]._id;
+    movies[3]._director = directors[1]._id;
+    movies[4]._director = directors[2]._id;
+    movies[5]._director = directors[2]._id;
+    deleteAllthenInsert().then(res => {
+      console.log(res);
+      mongoose.disconnect();
+    });
+  })
+  .catch(err => {
+    console.log("error calling upon movies");
+  });
 
-deleteAllthenInsert(movies).then(res => {
-  console.log(res);
-  mongoose.disconnect();
-});
-
-async function deleteAllthenInsert(movies) {
+async function deleteAllthenInsert() {
   await Movie.deleteMany();
   await Movie.insertMany(movies);
   await Director.deleteMany();

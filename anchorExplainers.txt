@@ -1,0 +1,46 @@
+//NOTE nested resolve function
+function is like in the rootquery +- callback inside first resolve
+in resolve one however we passed the id as argument 
+this returned us all the information --> we can access this info 
+in the parent object --> we can use this in the second resolve to find
+all the info of the element we had a relationship with 
+------------------------------------------------------------
+this is very similar to what we do in a rest api and mongoose 
+but there i often use an async function 
+
+//NOTE  mongoose explainer for graphql
+when working with mongoose we define a schema and based on the
+schema we make a subclass of mongoose.Model with the function .model()
+a model can be used to create new documents or to query existing documents
+
+//NOTE why we pass a function to field
+when we have dependencies from one type to another
+some type may be defined before another this is why
+we use a function in the field section of the type
+this function wont be executed upon first parse 
+
+
+//NOTE query example
+movie(id:"123"){
+    genre
+    name
+}
+will look inside of rootquerq fields for movie
+when movie is found it args because it expected an id
+to come allong with the query it will then attach it to
+the resolve function
+
+//NOTE shows how things can be done a hard and easy way 
+// ------- option2
+let allMovies = [];
+async function feedMovies() {
+  for (let i = 0; i < parent._movies.length; i++) {
+    await Movie.findById(parent._movies[i]).then(movieInfo =>
+      allMovies.push(movieInfo)
+    );
+  }
+  return allMovies;
+}
+return feedMovies();
+// ------ option1
+return Movie.find({ _director: parent.id });
