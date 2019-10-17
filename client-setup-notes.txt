@@ -1,0 +1,4 @@
+//NOTE apollo provider expl
+react appoloprovider is a wrapper for react
+and will help with injecting the received data
+from our graphql api in our application 

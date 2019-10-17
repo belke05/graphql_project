@@ -7,10 +7,7 @@ const express = require("express");
 // because those are coming from user and should
 // not be trusted
 const bodyParser = require("body-parser");
-// CORS defines a way in which a browser and server can interact to determine
-// whether or not it is safe to allow the cross-origin request.[3]
-// It allows for more freedom and functionality than purely same-origin requests,
-// but is more secure than simply allowing all cross-origin requests.
+//NOTE cors usecase
 const cors = require("cors");
 // used for the logger
 const logger = require("morgan");

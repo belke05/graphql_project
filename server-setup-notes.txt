@@ -44,3 +44,10 @@ async function feedMovies() {
 return feedMovies();
 // ------ option1
 return Movie.find({ _director: parent.id });
+
+
+//NOTE corse use case 
+CORS defines a way in which a browser and server can interact to determine
+whether or not it is safe to allow the cross-origin request.[3]
+It allows for more freedom and functionality than purely same-origin requests,
+but is more secure than simply allowing all cross-origin requests.

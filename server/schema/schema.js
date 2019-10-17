@@ -67,8 +67,11 @@ const RootQuery = new GraphQLObjectType({
       // when making query for this movie you have to give as argument
       // the id of the particular movie
       type: MovieType,
-      args: { id: { type: GraphQLID } },
+      args: { id: { type: GraphQLID }, name: { type: GraphQLString } },
       resolve(parent, args) {
+        // if (args.name) {
+        //   return Movie.findOne({ name: args.name });
+        // }
         return Movie.findById(args.id);
       }
     },
@@ -128,12 +131,7 @@ const Mutation = new GraphQLObjectType({
           _director: args._director
         });
       }
-    },
-    updateDirector: {
-      type: DirectorType,
-      args: {}
-    },
-    updateMovie: {}
+    }
   }
 });
 
@@ -144,27 +142,3 @@ module.exports = new GraphQLSchema({
 });
 
 //NOTE query example
-/* dummy data
-const movies = [
-  {
-    name: "blade",
-    overview: "action",
-    rating: 8,
-    id: "1",
-    _directorId: "4"
-  },
-  {
-    name: "once upon a time in hollywood",
-    overview: "drama",
-    rating: 9,
-    id: "2",
-    _directorId: "5"
-  },
-  { name: "el camino", overview: "drama", rating: 7, id: "3", _directorId: "4" }
-];
-const directors = [
-  { name: "russo", _movieIds: "1", age: 44, id: "4" },
-  { name: "tarrantino", _movieIds: "2", age: 59, id: "5" },
-  { name: "unknown", _movieIds: "3", age: 73, id: "6" }
-];
-*/
