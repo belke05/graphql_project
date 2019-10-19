@@ -67,19 +67,21 @@ const RootQuery = new GraphQLObjectType({
       // when making query for this movie you have to give as argument
       // the id of the particular movie
       type: MovieType,
-      args: { id: { type: GraphQLID }, name: { type: GraphQLString } },
+      args: { name: { type: GraphQLString } },
       resolve(parent, args) {
         // if (args.name) {
         //   return Movie.findOne({ name: args.name });
         // }
-        return Movie.findById(args.id);
+        console.log(args);
+        return Movie.findOne({ name: args.name });
       }
     },
     director: {
       type: DirectorType,
-      args: { id: { type: GraphQLID } },
+      args: { name: { type: GraphQLString } },
       resolve(parent, args) {
-        return Director.findById(args.id);
+        console.log(args.name);
+        return Director.findOne({ name: args.name });
       }
     },
     //NOTE getting all the values

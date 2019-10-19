@@ -1,46 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { graphql, useLazyQuery } from "react-apollo";
-import { getMovieQuery } from "../queries/queries";
+import { graphql, useLazyQuery, useQuery } from "react-apollo";
+import { getMovieQuery, getMoviesQuery } from "../queries/queries";
 
 function MovieDetail(props) {
-  const [movie, setMovie] = useState("");
-  const [movieSearch, setMovieSearch] = useState("");
-  console.log(props);
-  const [getMovieQuery, { loading, data }] = useLazyQuery(getMovieQuery);
-  if (data && data.movie) {
-    setMovie(data.movie);
-  }
+  // const { loading, error, data } = useQuery(getMovieQuery, {
+  //   variables: { name: "Joker" }
+  // });
+  const [searchedMovie, setSearchedMovie] = useState(null);
+  const [loadMovie, { called, loading, data }] = useLazyQuery(getMovieQuery, {
+    variables: { name: searchedMovie }
+  });
+
+  if (loading && called) return "Loading...";
+  console.log(data);
   return (
     <div>
       <input
         type="text"
-        value={movieSearch}
+        name="movie-title"
+        id="search-box"
+        value={searchedMovie}
         onChange={e => {
-          setMovieSearch(e.target.value);
+          setSearchedMovie(e.target.value);
         }}
-      ></input>
+      />
       <button
         onClick={e => {
-          getMovieQuery({ variables: { name: movieSearch } });
+          loadMovie();
         }}
       ></button>
-      {movie != "" && <div>{movie.name}</div>}
+      {called && !loading && (
+        <div>
+          {data.movie.name}
+          {data.movie.rating}
+        </div>
+      )}
     </div>
   );
 }
 
-export default graphql(
-  getMovieQuery
-  //   ,
-  //   {
-  //   // every time this state updates this query will rerun
-  //   options: props => {
-  //     console.log(movieSearchGlobal);
-  //     return {
-  //       variables: {
-  //         name: movieSearchGlobal
-  //       }
-  //     };
-  //   }
-  //  }
-)(MovieDetail);
+export default MovieDetail;

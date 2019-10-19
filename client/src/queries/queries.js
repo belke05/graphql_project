@@ -53,17 +53,39 @@ const addMovieMutation = gql`
 // same as uptop query and dollar sign indicates that we get
 // an id as argument
 const getMovieQuery = gql`
-  query($id: ID, $name: String) {
-    movie(name: $name, id: $id) {
+  query($name: String) {
+    movie(name: $name) {
       name
       rating
       overview
       id
       _director {
         name
+        _movies {
+          name
+        }
       }
     }
   }
 `;
 
-export { getDirectorsQuery, getMoviesQuery, addMovieMutation, getMovieQuery };
+const getDirectorQuery = gql`
+  query($name: String) {
+    director(name: $name) {
+      name
+      age
+      id
+      _movies {
+        name
+      }
+    }
+  }
+`;
+
+export {
+  getDirectorsQuery,
+  getMoviesQuery,
+  addMovieMutation,
+  getMovieQuery,
+  getDirectorQuery
+};
